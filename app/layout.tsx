@@ -1,24 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "MarketPulse",
-  description: "Track real time Stock Prices, get personalized alerts and explore detailed company insights",
+  description:
+    "Track markets, manage a personal watchlist, and receive AI-powered market briefings.",
 };
-<div className="bg-white text-black dark:bg-black dark:text-white p-10">
-  Test dark mode
-</div>
 
 export default function RootLayout({
   children,
@@ -28,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="bg-gray-900 text-gray-100 antialiased"
       >
         {children}
       </body>

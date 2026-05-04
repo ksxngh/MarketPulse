@@ -138,6 +138,10 @@
   }
   body {
     @apply bg-gray-900 text-foreground;
+    background:
+      linear-gradient(180deg, rgba(20, 20, 20, 0.94), rgba(5, 5, 5, 1) 320px),
+      radial-gradient(circle at 20% 0%, rgba(15, 237, 190, 0.08), transparent 36%),
+      radial-gradient(circle at 80% 10%, rgba(232, 186, 64, 0.08), transparent 34%);
   }
 }
 
@@ -155,10 +159,22 @@
     @apply w-full gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
   }
   .header {
-    @apply z-50 w-full h-[70px] bg-gray-800;
+    @apply z-50 w-full h-[70px] border-b border-gray-700/80 bg-black/80 backdrop-blur-xl;
   }
   .header-wrapper {
     @apply flex justify-between items-center px-6 py-4 text-gray-500;
+  }
+  .terminal-panel {
+    @apply rounded-lg border border-gray-700/90 bg-gray-800/90 shadow-2xl shadow-black/30;
+  }
+  .terminal-panel-dark {
+    @apply rounded-lg border border-gray-700/90 bg-black/70 shadow-2xl shadow-black/30;
+  }
+  .terminal-title {
+    @apply text-sm font-semibold uppercase tracking-[0.14em] text-gray-500;
+  }
+  .market-chip {
+    @apply rounded-md border border-gray-700 bg-gray-700/80 px-3 py-1 text-xs font-medium text-gray-400;
   }
   .auth-layout {
     @apply flex flex-col justify-between lg:flex-row h-screen bg-gray-900 relative overflow-hidden;

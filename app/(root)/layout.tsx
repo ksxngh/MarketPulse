@@ -1,15 +1,18 @@
-import Header from '@/components/Header'
-import React from 'react'
+import Header from "@/components/Header";
+import { redirect } from "next/navigation";
+import React from "react";
+import { getCurrentUser } from "@/actions/user.actions";
 
-const layout = ({children} :{children: React.ReactNode}) => {
+const layout = async ({ children }: { children: React.ReactNode }) => {
+  const user = await getCurrentUser();
+  if (!user) redirect("/sign-in");
+
   return (
-    <main className="flex min-h-screen home-wrapper">
-        <Header/>
-        <div className="container py-10">
-            {children}
-        </div>
+    <main className="flex min-h-screen flex-col bg-gray-900 text-gray-100">
+      <Header user={user} />
+      <div className="container py-8">{children}</div>
     </main>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;
