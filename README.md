@@ -16,6 +16,20 @@ MarketPulse is a full-stack stock-market dashboard built with Next.js, Better Au
 - Nodemailer email delivery with local preview logging
 - Basic server action rate limiting, input validation, and security headers
 
+
+## Screenshots
+
+### Dashboard
+![MarketPulse Dashboard](public/screenshots/dashboard.png)
+
+### Stock Details
+![Stock Details Page](public/screenshots/stock-details.png)
+
+### Watchlist
+![Watchlist Page](public/screenshots/watchlist.png)
+
+### Price Alerts
+![Price Alerts Page](public/screenshots/alerts.png)
 ## Tech Stack
 
 - **Framework:** Next.js 16, React 19, TypeScript
