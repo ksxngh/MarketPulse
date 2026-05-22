@@ -32,7 +32,10 @@ export default function AlertForm({
   }
 
   return (
-    <form action={handleSubmit} className="rounded-lg border border-gray-700 bg-gray-800 p-5">
+    <form
+      action={handleSubmit}
+      className="rounded-lg border border-gray-700 bg-gray-800 p-5"
+    >
       <div className="flex items-center gap-2">
         <Bell className="size-5 text-yellow-400" />
         <h2 className="text-lg font-semibold text-gray-100">Price alert</h2>
@@ -41,7 +44,11 @@ export default function AlertForm({
       <div className="mt-5 grid gap-4 sm:grid-cols-[130px_1fr]">
         <label className="space-y-2">
           <span className="form-label">Condition</span>
-          <select name="direction" className="form-input w-full" defaultValue="above">
+          <select
+            name="direction"
+            className="form-input w-full"
+            defaultValue="above"
+          >
             <option value="above">Above</option>
             <option value="below">Below</option>
           </select>
@@ -62,7 +69,11 @@ export default function AlertForm({
       </div>
 
       <Button className="yellow-btn mt-4 w-full" disabled={isPending}>
-        {isPending ? <Loader2 className="size-4 animate-spin" /> : <Bell className="size-4" />}
+        {isPending ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <Bell className="size-4" />
+        )}
         Create alert
       </Button>
 

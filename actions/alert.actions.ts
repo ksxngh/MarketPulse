@@ -60,7 +60,11 @@ export async function createPriceAlert(input: {
   const symbol = normalizeSymbol(input.symbol);
   const targetPrice = Number(input.targetPrice);
 
-  if (!Number.isFinite(targetPrice) || targetPrice <= 0 || targetPrice > 1_000_000) {
+  if (
+    !Number.isFinite(targetPrice) ||
+    targetPrice <= 0 ||
+    targetPrice > 1_000_000
+  ) {
     return { ok: false, message: "Enter a valid target price." };
   }
   if (!["above", "below"].includes(input.direction)) {
@@ -118,7 +122,7 @@ export async function reactivatePriceAlert(alertId: string) {
   const alert = await Alert.findOneAndUpdate(
     { _id: alertId, userId: user.id },
     { $set: { status: "active" }, $unset: { firedAt: "" } },
-    { new: true }
+    { new: true },
   );
 
   revalidatePath("/alerts");

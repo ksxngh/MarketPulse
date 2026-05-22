@@ -10,7 +10,12 @@ type EmailPayload = {
 };
 
 function shouldPreviewEmail() {
-  return env.emailMode === "preview" || !env.smtp.host || !env.smtp.user || !env.smtp.pass;
+  return (
+    env.emailMode === "preview" ||
+    !env.smtp.host ||
+    !env.smtp.user ||
+    !env.smtp.pass
+  );
 }
 
 export async function sendEmail(payload: EmailPayload) {
@@ -68,7 +73,10 @@ export async function sendDailyNewsEmail(input: {
   articles: MarketNews[];
 }) {
   const articleLinks = input.articles
-    .map((article) => `<li><a href="${article.url}">${article.headline}</a> <span>${article.source}</span></li>`)
+    .map(
+      (article) =>
+        `<li><a href="${article.url}">${article.headline}</a> <span>${article.source}</span></li>`,
+    )
     .join("");
 
   return sendEmail({
@@ -96,7 +104,8 @@ export async function sendPriceAlertEmail(input: {
   targetPrice: number;
   currentPrice: number;
 }) {
-  const directionLabel = input.direction === "above" ? "rose above" : "fell below";
+  const directionLabel =
+    input.direction === "above" ? "rose above" : "fell below";
   const subject = `${input.symbol} ${directionLabel} $${input.targetPrice.toFixed(2)}`;
   const text = `Hi ${input.firstName},\n\n${input.company} (${input.symbol}) ${directionLabel} your target of $${input.targetPrice.toFixed(2)}. Current price: $${input.currentPrice.toFixed(2)}.\n\nThis alert has been marked as fired in MarketPulse.`;
 

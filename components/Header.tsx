@@ -10,8 +10,16 @@ const Header = ({ user }: { user: Session["user"] }) => {
     <header className="sticky top-0 header">
       <div className="container header-wrapper">
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/assets/icons/logo.svg" alt="MarketPulse" width={34} height={34} className="size-8" />
-          <span className="text-lg font-semibold text-gray-100">MarketPulse</span>
+          <Image
+            src="/assets/icons/logo.svg"
+            alt="MarketPulse"
+            width={34}
+            height={34}
+            className="size-8"
+          />
+          <span className="text-lg font-semibold text-gray-100">
+            MarketPulse
+          </span>
         </Link>
         <nav className="hidden sm:block">
           <NavItems />

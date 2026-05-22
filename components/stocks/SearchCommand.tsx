@@ -25,7 +25,11 @@ export default function SearchCommand() {
           setResults(await searchStocks(query));
           setError("");
         } catch (searchError) {
-          setError(searchError instanceof Error ? searchError.message : "Search failed.");
+          setError(
+            searchError instanceof Error
+              ? searchError.message
+              : "Search failed.",
+          );
         }
       });
     }, 300);
@@ -43,13 +47,19 @@ export default function SearchCommand() {
           className="h-full flex-1 bg-transparent text-base text-gray-100 outline-none placeholder:text-gray-500"
           placeholder="Search stocks by symbol or company"
         />
-        {isPending ? <Loader2 className="size-4 animate-spin text-gray-500" /> : null}
+        {isPending ? (
+          <Loader2 className="size-4 animate-spin text-gray-500" />
+        ) : null}
       </div>
 
       <div className="max-h-80 overflow-y-auto p-2">
-        {error ? <p className="px-3 py-6 text-sm text-red-300">{error}</p> : null}
+        {error ? (
+          <p className="px-3 py-6 text-sm text-red-300">{error}</p>
+        ) : null}
         {!error && query.length >= 2 && results.length === 0 && !isPending ? (
-          <p className="px-3 py-6 text-sm text-gray-500">No matching symbols found.</p>
+          <p className="px-3 py-6 text-sm text-gray-500">
+            No matching symbols found.
+          </p>
         ) : null}
         {results.map((result) => (
           <Link
@@ -61,7 +71,9 @@ export default function SearchCommand() {
               <p className="font-semibold text-gray-100">{result.symbol}</p>
               <p className="text-sm text-gray-500">{result.description}</p>
             </div>
-            <span className="rounded bg-gray-700 px-2 py-1 text-xs uppercase text-gray-400">{result.type}</span>
+            <span className="rounded bg-gray-700 px-2 py-1 text-xs uppercase text-gray-400">
+              {result.type}
+            </span>
           </Link>
         ))}
       </div>

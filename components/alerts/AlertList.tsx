@@ -3,7 +3,10 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { ArrowRight, BellRing, Loader2, RotateCcw, Trash2 } from "lucide-react";
-import { deletePriceAlert, reactivatePriceAlert } from "@/actions/alert.actions";
+import {
+  deletePriceAlert,
+  reactivatePriceAlert,
+} from "@/actions/alert.actions";
 import { Button } from "@/components/ui/button";
 
 type AlertView = {
@@ -25,7 +28,9 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
     return (
       <div className="rounded-lg border border-dashed border-gray-700 bg-gray-800 px-4 py-10 text-center">
         <p className="font-medium text-gray-300">No alerts yet</p>
-        <p className="mt-2 text-sm text-gray-500">Open a stock page and create your first price alert.</p>
+        <p className="mt-2 text-sm text-gray-500">
+          Open a stock page and create your first price alert.
+        </p>
       </div>
     );
   }
@@ -33,7 +38,10 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
   return (
     <div className="grid gap-4">
       {alerts.map((alert) => (
-        <div key={alert.id} className="grid gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 lg:grid-cols-[1fr_180px_160px_160px] lg:items-center">
+        <div
+          key={alert.id}
+          className="grid gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 lg:grid-cols-[1fr_180px_160px_160px] lg:items-center"
+        >
           <Link href={`/stocks/${alert.symbol}`} className="group">
             <p className="flex items-center gap-2 text-xl font-semibold text-gray-100">
               {alert.symbol}
@@ -51,7 +59,13 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
 
           <div>
             <p className="text-sm text-gray-500">Status</p>
-            <p className={alert.status === "fired" ? "font-semibold text-yellow-400" : "font-semibold text-teal-400"}>
+            <p
+              className={
+                alert.status === "fired"
+                  ? "font-semibold text-yellow-400"
+                  : "font-semibold text-teal-400"
+              }
+            >
               {alert.status === "fired" ? "Fired" : "Active"}
             </p>
           </div>
@@ -64,9 +78,15 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
                 size="icon"
                 disabled={isPending}
                 title="Reactivate alert"
-                onClick={() => startTransition(() => void reactivatePriceAlert(alert.id))}
+                onClick={() =>
+                  startTransition(() => void reactivatePriceAlert(alert.id))
+                }
               >
-                {isPending ? <Loader2 className="size-4 animate-spin" /> : <RotateCcw className="size-4" />}
+                {isPending ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <RotateCcw className="size-4" />
+                )}
               </Button>
             ) : null}
             <Button
@@ -75,9 +95,15 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
               size="icon"
               disabled={isPending}
               title="Delete alert"
-              onClick={() => startTransition(() => void deletePriceAlert(alert.id))}
+              onClick={() =>
+                startTransition(() => void deletePriceAlert(alert.id))
+              }
             >
-              {isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+              {isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Trash2 className="size-4" />
+              )}
             </Button>
           </div>
         </div>

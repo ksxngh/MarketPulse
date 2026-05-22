@@ -2,14 +2,24 @@
 
 import { useEffect, useRef } from "react";
 
-type WidgetType = "symbol-info" | "advanced-chart" | "technical-analysis" | "company-profile" | "financials";
+type WidgetType =
+  | "symbol-info"
+  | "advanced-chart"
+  | "technical-analysis"
+  | "company-profile"
+  | "financials";
 
 const widgetSources: Record<WidgetType, string> = {
-  "symbol-info": "https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js",
-  "advanced-chart": "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js",
-  "technical-analysis": "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js",
-  "company-profile": "https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js",
-  financials: "https://s3.tradingview.com/external-embedding/embed-widget-financials.js",
+  "symbol-info":
+    "https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js",
+  "advanced-chart":
+    "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js",
+  "technical-analysis":
+    "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js",
+  "company-profile":
+    "https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js",
+  financials:
+    "https://s3.tradingview.com/external-embedding/embed-widget-financials.js",
 };
 
 export default function TradingViewWidget({

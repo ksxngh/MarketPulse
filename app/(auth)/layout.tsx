@@ -1,7 +1,11 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/actions/user.actions";
 
-export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const user = await getCurrentUser();
   if (user) redirect("/");
 
@@ -17,12 +21,20 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
               MarketPulse
             </div>
             <h2 className="mt-10 max-w-xl text-4xl font-semibold leading-tight text-gray-100">
-              A focused command center for watchlists, charts, market search, and AI briefings.
+              A focused command center for watchlists, charts, market search,
+              and AI briefings.
             </h2>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            {["Live symbol search", "TradingView chart pages", "AI email workflows"].map((item) => (
-              <div key={item} className="rounded-lg border border-gray-700 bg-gray-900 p-4 text-sm text-gray-400">
+            {[
+              "Live symbol search",
+              "TradingView chart pages",
+              "AI email workflows",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-lg border border-gray-700 bg-gray-900 p-4 text-sm text-gray-400"
+              >
                 {item}
               </div>
             ))}

@@ -7,7 +7,7 @@ const WatchlistSchema = new Schema(
     company: { type: String, required: true, trim: true },
     addedAt: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 WatchlistSchema.index({ userId: 1, symbol: 1 }, { unique: true });

@@ -11,7 +11,9 @@ export async function getUserWatchlist() {
   if (!user) return [];
 
   await connectToDatabase();
-  const items = await Watchlist.find({ userId: user.id }).sort({ addedAt: -1 }).lean();
+  const items = await Watchlist.find({ userId: user.id })
+    .sort({ addedAt: -1 })
+    .lean();
 
   return items.map((item) => ({
     id: String(item._id),
@@ -56,7 +58,7 @@ export async function addToWatchlist(symbol: string, company: string) {
       },
       $setOnInsert: { addedAt: new Date() },
     },
-    { upsert: true }
+    { upsert: true },
   );
 
   revalidatePath("/");
@@ -85,5 +87,8 @@ export async function removeFromWatchlist(symbol: string) {
   revalidatePath("/watchlist");
   revalidatePath(`/stocks/${normalizedSymbol}`);
 
-  return { ok: true, message: `${normalizedSymbol} removed from your watchlist.` };
+  return {
+    ok: true,
+    message: `${normalizedSymbol} removed from your watchlist.`,
+  };
 }

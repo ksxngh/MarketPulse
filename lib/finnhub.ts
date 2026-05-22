@@ -30,13 +30,20 @@ export type StockQuote = {
   timestamp: number;
 };
 
-async function finnhubFetch<T>(path: string, params: Record<string, string> = {}): Promise<T> {
+async function finnhubFetch<T>(
+  path: string,
+  params: Record<string, string> = {},
+): Promise<T> {
   if (!env.finnhubApiKey) {
-    throw new Error("Missing FINNHUB_API_KEY. Add it to .env.local to fetch live market data.");
+    throw new Error(
+      "Missing FINNHUB_API_KEY. Add it to .env.local to fetch live market data.",
+    );
   }
 
   const url = new URL(`https://finnhub.io/api/v1/${path}`);
-  Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.set(key, value),
+  );
   url.searchParams.set("token", env.finnhubApiKey);
 
   const response = await fetch(url, {
@@ -51,7 +58,10 @@ async function finnhubFetch<T>(path: string, params: Record<string, string> = {}
 }
 
 export async function searchFinnhubStocks(query: string) {
-  const data = await finnhubFetch<{ count: number; result: FinnhubSearchResult[] }>("search", {
+  const data = await finnhubFetch<{
+    count: number;
+    result: FinnhubSearchResult[];
+  }>("search", {
     q: query,
   });
 
@@ -123,13 +133,13 @@ export async function getMarketDashboardData() {
       symbols.map(async (item) => ({
         ...item,
         quote: await getStockQuote(item.symbol),
-      }))
+      })),
     ),
     Promise.all(
       indices.map(async (item) => ({
         ...item,
         quote: await getStockQuote(item.symbol),
-      }))
+      })),
     ),
     getGeneralNews(),
   ]);

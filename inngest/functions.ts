@@ -1,8 +1,17 @@
 import { inngest } from "@/inngest/client";
 import { ObjectId } from "mongodb";
 import { generateNewsSummary, generateWelcomeIntro } from "@/lib/ai";
-import { sendDailyNewsEmail, sendPriceAlertEmail, sendWelcomeEmail } from "@/lib/email";
-import { getCompanyNews, getGeneralNews, getStockQuote, type MarketNews } from "@/lib/finnhub";
+import {
+  sendDailyNewsEmail,
+  sendPriceAlertEmail,
+  sendWelcomeEmail,
+} from "@/lib/email";
+import {
+  getCompanyNews,
+  getGeneralNews,
+  getStockQuote,
+  type MarketNews,
+} from "@/lib/finnhub";
 import { connectToDatabase, getMongoDb } from "@/lib/mongodb";
 import { Alert } from "@/lib/models/alert.model";
 import { Watchlist } from "@/lib/models/watchlist.model";
@@ -21,7 +30,7 @@ export const sendSignUpEmail = inngest.createFunction(
   async ({ event, step }) => {
     const user = (event as unknown as CreatedUserEvent).data;
     const intro = await step.run("generate-welcome-intro", () =>
-      generateWelcomeIntro(user)
+      generateWelcomeIntro(user),
     );
 
     await step.run("send-welcome-email", () =>
@@ -29,11 +38,11 @@ export const sendSignUpEmail = inngest.createFunction(
         to: user.email,
         firstName: user.firstName,
         intro,
-      })
+      }),
     );
 
     return { sent: true };
-  }
+  },
 );
 
 export const dailyNewsSummary = inngest.createFunction(
@@ -41,7 +50,10 @@ export const dailyNewsSummary = inngest.createFunction(
   async ({ step }) => {
     const users = await step.run("get-users", async () => {
       const db = await getMongoDb();
-      return db.collection("user").find({ email: { $exists: true } }).toArray();
+      return db
+        .collection("user")
+        .find({ email: { $exists: true } })
+        .toArray();
     });
 
     const results = [];
@@ -84,7 +96,7 @@ export const dailyNewsSummary = inngest.createFunction(
     }
 
     return { processed: results.length, results };
-  }
+  },
 );
 
 export const checkPriceAlerts = inngest.createFunction(
@@ -108,7 +120,7 @@ export const checkPriceAlerts = inngest.createFunction(
 
         await Alert.updateOne(
           { _id: alert._id },
-          { $set: { lastCheckedPrice: currentPrice } }
+          { $set: { lastCheckedPrice: currentPrice } },
         );
 
         if (!targetReached) {
@@ -125,7 +137,9 @@ export const checkPriceAlerts = inngest.createFunction(
           userIdQueries.push({ _id: new ObjectId(alert.userId) });
         }
 
-        const user = await db.collection("user").findOne({ $or: userIdQueries });
+        const user = await db
+          .collection("user")
+          .findOne({ $or: userIdQueries });
 
         if (user?.email) {
           await sendPriceAlertEmail({
@@ -147,7 +161,7 @@ export const checkPriceAlerts = inngest.createFunction(
               firedAt: new Date(),
               lastCheckedPrice: currentPrice,
             },
-          }
+          },
         );
 
         return { alertId: String(alert._id), fired: true, currentPrice };
@@ -156,6 +170,9 @@ export const checkPriceAlerts = inngest.createFunction(
       results.push(result);
     }
 
-    return { checked: results.length, fired: results.filter((result) => result.fired).length };
-  }
+    return {
+      checked: results.length,
+      fired: results.filter((result) => result.fired).length,
+    };
+  },
 );

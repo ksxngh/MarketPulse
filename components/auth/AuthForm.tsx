@@ -93,23 +93,44 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="space-y-2">
               <span className="form-label">First name</span>
-              <input className="form-input w-full" name="firstName" required minLength={2} />
+              <input
+                className="form-input w-full"
+                name="firstName"
+                required
+                minLength={2}
+              />
             </label>
             <label className="space-y-2">
               <span className="form-label">Last name</span>
-              <input className="form-input w-full" name="lastName" required minLength={2} />
+              <input
+                className="form-input w-full"
+                name="lastName"
+                required
+                minLength={2}
+              />
             </label>
           </div>
         ) : null}
 
         <label className="block space-y-2">
           <span className="form-label">Email</span>
-          <input className="form-input w-full" name="email" type="email" required />
+          <input
+            className="form-input w-full"
+            name="email"
+            type="email"
+            required
+          />
         </label>
 
         <label className="block space-y-2">
           <span className="form-label">Password</span>
-          <input className="form-input w-full" name="password" type="password" required minLength={8} />
+          <input
+            className="form-input w-full"
+            name="password"
+            type="password"
+            required
+            minLength={8}
+          />
         </label>
 
         {error ? (

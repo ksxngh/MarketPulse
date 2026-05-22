@@ -1,9 +1,15 @@
 const optional = (key: string, fallback = "") => process.env[key] ?? fallback;
 
 export const env = {
-  appUrl: optional("NEXT_PUBLIC_APP_URL", optional("BETTER_AUTH_URL", "http://localhost:3000")),
+  appUrl: optional(
+    "NEXT_PUBLIC_APP_URL",
+    optional("BETTER_AUTH_URL", "http://localhost:3000"),
+  ),
   betterAuthUrl: optional("BETTER_AUTH_URL", "http://localhost:3000"),
-  betterAuthSecret: optional("BETTER_AUTH_SECRET", "dev-only-change-me-marketpulse-local-secret"),
+  betterAuthSecret: optional(
+    "BETTER_AUTH_SECRET",
+    "dev-only-change-me-marketpulse-local-secret",
+  ),
   mongodbUri: optional("MONGODB_URI", "mongodb://127.0.0.1:27017/marketpulse"),
   finnhubApiKey: optional("FINNHUB_API_KEY"),
   geminiApiKey: optional("GEMINI_API_KEY"),

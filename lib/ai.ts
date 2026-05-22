@@ -26,7 +26,10 @@ export async function generateNewsSummary(input: {
   articles: MarketNews[];
 }) {
   const headlines = input.articles
-    .map((article, index) => `${index + 1}. ${article.headline} - ${article.summary}`)
+    .map(
+      (article, index) =>
+        `${index + 1}. ${article.headline} - ${article.summary}`,
+    )
     .join("\n");
 
   if (!env.geminiApiKey) {
