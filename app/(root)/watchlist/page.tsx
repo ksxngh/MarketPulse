@@ -28,12 +28,14 @@ export default async function WatchlistPage() {
             key={item.symbol}
             className="grid gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 md:grid-cols-[1fr_220px_180px] md:items-center"
           >
-            <Link href={`/stocks/${item.symbol}`} className="group">
+            <Link href={`/stocks/${item.symbol}`} className="group min-w-0">
               <p className="flex items-center gap-2 text-xl font-semibold text-gray-100">
                 {item.symbol}
                 <ArrowRight className="size-4 text-gray-500 transition-colors group-hover:text-yellow-400" />
               </p>
-              <p className="mt-1 text-sm text-gray-500">{item.company}</p>
+              <p className="mt-1 truncate text-sm text-gray-500">
+                {item.company}
+              </p>
             </Link>
             <p className="text-sm text-gray-500">
               Added{" "}

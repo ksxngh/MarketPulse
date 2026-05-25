@@ -221,7 +221,7 @@ export default function InvestmentForm() {
               : "0"}
           </p>
         </div>
-        <Button className="yellow-btn h-full w-full" disabled={isPending}>
+        <Button className="yellow-btn h-12 w-full md:h-full" disabled={isPending}>
           {isPending ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (

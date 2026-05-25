@@ -51,7 +51,7 @@ export default async function InvestmentsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid gap-3 min-[420px]:grid-cols-3">
           {[
             {
               label: "Invested",
@@ -74,7 +74,7 @@ export default async function InvestmentsPage() {
           ].map((metric) => (
             <div key={metric.label} className="terminal-panel p-4">
               <metric.icon className={`size-5 ${metric.tone}`} />
-              <p className="mt-4 text-lg font-semibold text-gray-100">
+              <p className="mt-3 break-words text-base font-semibold text-gray-100 sm:mt-4 sm:text-lg">
                 {metric.value}
               </p>
               <p className="text-xs text-gray-500">{metric.label}</p>
@@ -102,7 +102,7 @@ export default async function InvestmentsPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px] text-left text-sm">
+          <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="border-y border-gray-700 bg-black/50 text-xs uppercase text-gray-500">
               <tr>
                 {[

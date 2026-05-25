@@ -170,7 +170,7 @@
     @apply z-50 w-full h-[70px] border-b border-gray-700/80 bg-black/80 backdrop-blur-xl;
   }
   .header-wrapper {
-    @apply flex justify-between items-center px-6 py-4 text-gray-500;
+    @apply flex justify-between items-center gap-3 px-4 py-4 text-gray-500 sm:px-6;
   }
   .terminal-panel {
     @apply rounded-lg border border-gray-700/90 bg-gray-800/90 shadow-2xl shadow-black/30;
@@ -272,7 +272,7 @@
     @apply font-medium text-base text-gray-400;
   }
   .nav-list {
-    @apply flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium;
+    @apply flex flex-col sm:flex-row p-2 gap-3 sm:gap-6 xl:gap-10 font-medium;
   }
   .stock-details-container {
     @apply w-full grid-cols-1 gap-6 xl:grid-cols-3 space-y-6 sm:space-y-8;

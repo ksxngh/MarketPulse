@@ -42,12 +42,14 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
           key={alert.id}
           className="grid gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 lg:grid-cols-[1fr_180px_160px_160px] lg:items-center"
         >
-          <Link href={`/stocks/${alert.symbol}`} className="group">
+          <Link href={`/stocks/${alert.symbol}`} className="group min-w-0">
             <p className="flex items-center gap-2 text-xl font-semibold text-gray-100">
               {alert.symbol}
               <ArrowRight className="size-4 text-gray-500 transition-colors group-hover:text-yellow-400" />
             </p>
-            <p className="mt-1 text-sm text-gray-500">{alert.company}</p>
+            <p className="mt-1 truncate text-sm text-gray-500">
+              {alert.company}
+            </p>
           </Link>
 
           <div>

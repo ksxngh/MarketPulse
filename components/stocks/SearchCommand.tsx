@@ -65,13 +65,15 @@ export default function SearchCommand() {
           <Link
             key={`${result.symbol}-${result.description}`}
             href={`/stocks/${encodeURIComponent(result.symbol)}`}
-            className="flex items-center justify-between rounded-md border border-transparent px-3 py-3 transition-colors hover:border-gray-700 hover:bg-gray-800"
+            className="flex items-center justify-between gap-3 rounded-md border border-transparent px-3 py-3 transition-colors hover:border-gray-700 hover:bg-gray-800"
           >
-            <div>
+            <div className="min-w-0">
               <p className="font-semibold text-gray-100">{result.symbol}</p>
-              <p className="text-sm text-gray-500">{result.description}</p>
+              <p className="truncate text-sm text-gray-500">
+                {result.description}
+              </p>
             </div>
-            <span className="rounded bg-gray-700 px-2 py-1 text-xs uppercase text-gray-400">
+            <span className="shrink-0 rounded bg-gray-700 px-2 py-1 text-xs uppercase text-gray-400">
               {result.type}
             </span>
           </Link>

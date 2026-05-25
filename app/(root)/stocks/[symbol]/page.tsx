@@ -33,13 +33,13 @@ export default async function StockDetailPage({ params }: PageProps) {
     <div className="space-y-6">
       <section className="terminal-panel p-5">
         <div className="grid gap-5 xl:grid-cols-[1fr_280px] xl:items-center">
-          <div className="flex items-center gap-4">
-            <div className="flex size-14 items-center justify-center rounded-lg border border-gray-700 bg-black text-xl font-semibold text-yellow-400">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-black text-lg font-semibold text-yellow-400 sm:size-14 sm:text-xl">
               {symbol.slice(0, 2)}
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="terminal-title">Stock Details</p>
-              <h1 className="mt-2 text-3xl font-semibold text-gray-100">
+              <h1 className="mt-2 truncate text-3xl font-semibold text-gray-100">
                 {symbol}
               </h1>
               <p className="mt-2 text-sm text-gray-500">
@@ -54,7 +54,7 @@ export default async function StockDetailPage({ params }: PageProps) {
           />
         </div>
 
-        <div className="mt-5 grid gap-3 md:grid-cols-4">
+        <div className="mt-5 grid gap-3 min-[420px]:grid-cols-2 lg:grid-cols-4">
           {[
             {
               label: "Price Feed",

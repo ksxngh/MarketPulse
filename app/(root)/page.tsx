@@ -51,7 +51,7 @@ const Home = async () => {
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <div>
           <p className="terminal-title">Dashboard</p>
-          <h1 className="mt-3 text-4xl font-semibold text-gray-100 md:text-5xl">
+          <h1 className="mt-3 text-3xl font-semibold text-gray-100 md:text-5xl">
             MarketPulse
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-500">
@@ -59,7 +59,7 @@ const Home = async () => {
             workspace is live.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid gap-3 min-[420px]:grid-cols-3">
           {[
             {
               label: "Tracked",
@@ -82,7 +82,7 @@ const Home = async () => {
           ].map((metric) => (
             <div key={metric.label} className="terminal-panel p-4">
               <metric.icon className={`size-5 ${metric.tone}`} />
-              <p className="mt-4 text-2xl font-semibold text-gray-100">
+              <p className="mt-3 text-xl font-semibold text-gray-100 sm:mt-4 sm:text-2xl">
                 {metric.value}
               </p>
               <p className="text-xs text-gray-500">{metric.label}</p>
@@ -102,7 +102,7 @@ const Home = async () => {
                 S&P 500 intraday range
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex max-w-full gap-2 overflow-x-auto pb-1 scrollbar-hide">
               {["Indices", "Stocks", "ETFs", "Crypto"].map((item) => (
                 <span key={item} className="market-chip">
                   {item}
@@ -150,7 +150,7 @@ const Home = async () => {
             </svg>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {[
               ...(dashboard.indices.length
                 ? dashboard.indices.map((item) => [
@@ -200,7 +200,7 @@ const Home = async () => {
                 View all <ArrowRight className="size-4" />
               </Link>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {watchlist.slice(0, 4).map((item, index) => (
                 <Link
                   key={item.symbol}
@@ -328,10 +328,10 @@ const Home = async () => {
             {dashboard.news.map((story, index) => (
               <article
                 key={story.id}
-                className="grid grid-cols-[1fr_120px] gap-4 rounded-lg border border-gray-700 bg-black/40 p-3"
+                className="grid gap-4 rounded-lg border border-gray-700 bg-black/40 p-3 sm:grid-cols-[1fr_120px]"
               >
-                <div>
-                  <div className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded bg-gray-700 px-2 py-1 text-[11px] text-gray-400">
                       {story.category || "Market"}
                     </span>
@@ -348,7 +348,7 @@ const Home = async () => {
                   </Link>
                 </div>
                 <div
-                  className={`rounded-md border border-gray-700 ${index === 1 ? "bg-teal-400/10" : index === 2 ? "bg-blue-600/10" : "bg-yellow-500/10"} p-3`}
+                  className={`hidden rounded-md border border-gray-700 ${index === 1 ? "bg-teal-400/10" : index === 2 ? "bg-blue-600/10" : "bg-yellow-500/10"} p-3 sm:block`}
                 >
                   {index === 1 ? (
                     <TrendingUp className="size-5 text-teal-400" />

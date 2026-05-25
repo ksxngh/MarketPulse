@@ -6,8 +6,34 @@ import { getMongoDb, getMongoClient } from "@/lib/mongodb";
 
 const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
+function toOrigin(value?: string) {
+  if (!value) return "";
+
+  const url = value.startsWith("http") ? value : `https://${value}`;
+
+  try {
+    return new URL(url).origin;
+  } catch {
+    return "";
+  }
+}
+
+const trustedOrigins = Array.from(
+  new Set(
+    [
+      env.appUrl,
+      env.betterAuthUrl,
+      process.env.VERCEL_URL,
+      process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    ]
+      .map(toOrigin)
+      .filter(Boolean),
+  ),
+);
+
 export const auth = betterAuth({
   baseURL: env.betterAuthUrl,
+  trustedOrigins,
   secret: env.betterAuthSecret,
   database: isProductionBuild
     ? memoryAdapter({})
