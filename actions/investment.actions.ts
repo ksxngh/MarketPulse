@@ -122,8 +122,9 @@ export async function getInvestmentDetail(symbol: string) {
 export async function addInvestment(input: {
   symbol: string;
   company?: string;
-  shares: number;
-  averageBuyPrice: number;
+  shares?: number;
+  averageBuyPrice?: number;
+  amountInvested?: number;
   boughtAt?: string;
 }) {
   await rateLimit("investment-write", 20);
@@ -133,19 +134,40 @@ export async function addInvestment(input: {
   }
 
   const symbol = normalizeSymbol(input.symbol);
-  const shares = Number(input.shares);
-  const averageBuyPrice = Number(input.averageBuyPrice);
+  const amountInvested = Number(input.amountInvested);
+  let shares = Number(input.shares);
+  let averageBuyPrice = Number(input.averageBuyPrice);
   const boughtAt = input.boughtAt ? new Date(input.boughtAt) : new Date();
 
-  if (!Number.isFinite(shares) || shares <= 0 || shares > 1_000_000) {
-    return { ok: false, message: "Enter a valid share quantity." };
-  }
-  if (
-    !Number.isFinite(averageBuyPrice) ||
-    averageBuyPrice <= 0 ||
-    averageBuyPrice > 1_000_000
-  ) {
-    return { ok: false, message: "Enter a valid buy price." };
+  if (Number.isFinite(amountInvested) && amountInvested > 0) {
+    if (amountInvested > 100_000_000) {
+      return { ok: false, message: "Enter a smaller investment amount." };
+    }
+
+    try {
+      const quote = await getStockQuote(symbol);
+      if (!quote.currentPrice || quote.currentPrice <= 0) {
+        return { ok: false, message: "No live price available for that stock." };
+      }
+      averageBuyPrice = quote.currentPrice;
+      shares = amountInvested / quote.currentPrice;
+    } catch {
+      return {
+        ok: false,
+        message: "Could not fetch a live price for that stock.",
+      };
+    }
+  } else {
+    if (!Number.isFinite(shares) || shares <= 0 || shares > 1_000_000) {
+      return { ok: false, message: "Enter a valid share quantity." };
+    }
+    if (
+      !Number.isFinite(averageBuyPrice) ||
+      averageBuyPrice <= 0 ||
+      averageBuyPrice > 1_000_000
+    ) {
+      return { ok: false, message: "Enter a valid buy price." };
+    }
   }
   if (Number.isNaN(boughtAt.getTime()) || boughtAt > new Date()) {
     return { ok: false, message: "Choose a valid buy date." };

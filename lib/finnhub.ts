@@ -33,6 +33,7 @@ export type StockQuote = {
 async function finnhubFetch<T>(
   path: string,
   params: Record<string, string> = {},
+  options: { revalidate?: number | false } = {},
 ): Promise<T> {
   if (!env.finnhubApiKey) {
     throw new Error(
@@ -46,9 +47,12 @@ async function finnhubFetch<T>(
   );
   url.searchParams.set("token", env.finnhubApiKey);
 
-  const response = await fetch(url, {
-    next: { revalidate: 60 },
-  });
+  const response = await fetch(
+    url,
+    options.revalidate === false
+      ? { cache: "no-store" }
+      : { next: { revalidate: options.revalidate ?? 60 } },
+  );
 
   if (!response.ok) {
     throw new Error(`Finnhub request failed: ${response.status}`);
@@ -98,7 +102,7 @@ export async function getStockQuote(symbol: string): Promise<StockQuote> {
     o: number;
     pc: number;
     t: number;
-  }>("quote", { symbol });
+  }>("quote", { symbol }, { revalidate: false });
 
   return {
     currentPrice: quote.c,

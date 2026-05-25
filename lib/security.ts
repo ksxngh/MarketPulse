@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
-
-const buckets = new Map<string, { count: number; resetAt: number }>();
+import { isRateLimited } from "@/lib/rate-limit";
 
 export function normalizeSymbol(value: string) {
   const symbol = value.trim().toUpperCase();
@@ -21,17 +20,8 @@ export async function rateLimit(scope: string, limit = 30, windowMs = 60_000) {
     headerStore.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     headerStore.get("x-real-ip") ||
     "local";
-  const key = `${scope}:${ip}`;
-  const now = Date.now();
-  const bucket = buckets.get(key);
 
-  if (!bucket || bucket.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs });
-    return;
-  }
-
-  bucket.count += 1;
-  if (bucket.count > limit) {
+  if (await isRateLimited({ key: `${scope}:${ip}`, limit, windowMs })) {
     throw new Error("Too many requests. Try again shortly.");
   }
 }

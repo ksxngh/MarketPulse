@@ -1,20 +1,21 @@
 # MarketPulse
 
-MarketPulse is a full-stack stock-market dashboard built with Next.js, Better Auth, MongoDB, Finnhub, TradingView widgets, Inngest, Gemini, and Nodemailer. It supports authenticated user accounts, stock search, TradingView-powered stock detail pages, persistent watchlists, price alerts, AI-generated welcome emails, and scheduled market briefing emails.
+MarketPulse is a full-stack stock-market dashboard built with Next.js, Better Auth, MongoDB, Finnhub, TradingView widgets, Inngest, Gemini, and Nodemailer. It supports authenticated user accounts, stock search, TradingView-powered stock detail pages, persistent watchlists, investment tracking, price alerts, AI-generated welcome emails, and scheduled market briefing emails.
 
 ## Features
 
 - Email/password authentication with first name and last name capture
-- Protected dashboard, watchlist, alerts, and stock detail pages
-- Finnhub-powered stock search with debounced results
+- Protected dashboard, watchlist, investments, alerts, and stock detail pages
+- Finnhub-powered stock search with debounced results and symbol/name suggestions
 - Live dashboard quotes for major stocks and ETF market proxies
 - TradingView widgets for symbol info, charts, technical analysis, company profile, and financials
 - MongoDB-backed watchlist per user
+- MongoDB-backed investment tracker with live quote-based share calculation and profit/loss views
 - MongoDB-backed price alerts with above/below target triggers
 - Inngest background workflows for signup emails, daily market summaries, and alert polling
 - Gemini-generated welcome copy and market summaries with safe fallbacks
 - Nodemailer email delivery with local preview logging
-- Basic server action rate limiting, input validation, and security headers
+- Server action/API rate limiting, input validation, and security headers
 
 ## Screenshots
 
@@ -29,6 +30,10 @@ MarketPulse is a full-stack stock-market dashboard built with Next.js, Better Au
 ### Watchlist
 
 ![Watchlist Page](public/screenshots/watchlist.png)
+
+### Investments
+
+Track real brokerage positions by selecting a stock, entering money spent, and letting MarketPulse calculate estimated shares from the latest Finnhub quote.
 
 ### Price Alerts
 
@@ -55,7 +60,9 @@ User
   |
   +--> Dashboard/Search ----> Server Actions ----> Finnhub
   |
-  +--> Watchlist/Alerts ----> Server Actions ----> MongoDB
+  +--> Watchlist/Investments/Alerts ----> Server Actions ----> MongoDB
+  |
+  +--> Investment Quote Preview ----> Server Actions ----> Finnhub live quote
   |
   +--> Stock Page ----> TradingView Widgets
   |
@@ -99,6 +106,8 @@ BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=http://localhost:3000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 FINNHUB_API_KEY=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 GEMINI_API_KEY=
 EMAIL_MODE=preview
 INNGEST_DEV=1
@@ -150,13 +159,13 @@ For local development, `EMAIL_MODE=preview` logs emails instead of sending them.
 
 - `.env`, `.env.local`, and other env files are ignored by Git
 - `node_modules` and `.next` are ignored by Git
-- Server actions verify the authenticated user before watchlist and alert mutations
-- Watchlist and alert mutations are scoped by `userId`
-- Stock symbols and alert prices are validated server-side
-- Search, watchlist, and alert actions have lightweight in-memory rate limiting
-- Security headers are configured in `next.config.ts`
+- Server actions verify the authenticated user before watchlist, investment, and alert mutations
+- Watchlist, investment, and alert mutations are scoped by `userId`
+- Stock symbols, investment amounts, dates, and alert prices are validated server-side
+- Search, quote, watchlist, investment, alert, API, and auth routes use Upstash Redis rate limiting when configured, with local in-memory fallback for development
+- Security headers and API/auth throttling are configured in `proxy.ts`
 
-For production, replace in-memory rate limiting with a shared store such as Redis or Upstash, configure MongoDB Atlas network access carefully, use a strong `BETTER_AUTH_SECRET`, and enable real Inngest signing keys.
+For production, configure `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`, configure MongoDB Atlas network access carefully, use a strong `BETTER_AUTH_SECRET`, and enable real Inngest signing keys. For real DDoS protection, deploy behind a platform/CDN layer such as Vercel, Cloudflare, or another provider with edge-level traffic filtering.
 
 ## Git Hygiene
 
@@ -181,11 +190,13 @@ Implemented:
 - Stock search
 - Stock detail pages
 - Watchlist
+- Investments
 - Alerts
 - Email templates
 - Inngest workflows
 - Gemini summaries
 - Basic security hardening
+- Durable production rate limiting with Upstash Redis REST
 
 Planned improvements:
 

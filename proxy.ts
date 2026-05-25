@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const buckets = new Map<string, { count: number; resetAt: number }>();
+import { isRateLimited } from "@/lib/rate-limit";
 
 const securityHeaders = {
   "X-DNS-Prefetch-Control": "on",
@@ -19,25 +18,16 @@ function clientIp(request: NextRequest) {
   );
 }
 
-function isRateLimited(key: string, limit: number, windowMs: number) {
-  const now = Date.now();
-  const bucket = buckets.get(key);
-
-  if (!bucket || bucket.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs });
-    return false;
-  }
-
-  bucket.count += 1;
-  return bucket.count > limit;
-}
-
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (
     pathname.startsWith("/api/auth") &&
-    isRateLimited(`auth:${clientIp(request)}`, 20, 60_000)
+    (await isRateLimited({
+      key: `auth:${clientIp(request)}`,
+      limit: 20,
+      windowMs: 60_000,
+    }))
   ) {
     return NextResponse.json(
       { error: "Too many auth requests. Try again shortly." },
@@ -47,7 +37,11 @@ export function proxy(request: NextRequest) {
 
   if (
     pathname.startsWith("/api") &&
-    isRateLimited(`api:${clientIp(request)}`, 120, 60_000)
+    (await isRateLimited({
+      key: `api:${clientIp(request)}`,
+      limit: 120,
+      windowMs: 60_000,
+    }))
   ) {
     return NextResponse.json(
       { error: "Too many requests. Try again shortly." },
