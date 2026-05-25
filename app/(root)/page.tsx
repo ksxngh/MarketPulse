@@ -13,6 +13,7 @@ import SearchCommand from "@/components/stocks/SearchCommand";
 import { getCurrentUser } from "@/actions/user.actions";
 import { getUserWatchlist } from "@/actions/watchlist.actions";
 import { getUserAlerts } from "@/actions/alert.actions";
+import { getUserInvestments } from "@/actions/investment.actions";
 import { getMarketDashboardData } from "@/lib/finnhub";
 
 const fallbackDashboard = {
@@ -36,9 +37,10 @@ function formatPercent(value: number) {
 
 const Home = async () => {
   const user = await getCurrentUser();
-  const [watchlist, alerts] = await Promise.all([
+  const [watchlist, alerts, investments] = await Promise.all([
     getUserWatchlist(),
     getUserAlerts(),
+    getUserInvestments(),
   ]);
   const dashboard = await getMarketDashboardData().catch(
     () => fallbackDashboard,
@@ -72,9 +74,9 @@ const Home = async () => {
               tone: "text-teal-400",
             },
             {
-              label: "Search",
-              value: "Live",
-              icon: Search,
+              label: "Investments",
+              value: investments.length,
+              icon: BriefcaseBusiness,
               tone: "text-blue-600",
             },
           ].map((metric) => (
