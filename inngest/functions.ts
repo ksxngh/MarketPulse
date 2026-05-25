@@ -33,7 +33,7 @@ export const sendSignUpEmail = inngest.createFunction(
       generateWelcomeIntro(user),
     );
 
-    await step.run("send-welcome-email", () =>
+    const emailResult = await step.run("send-welcome-email", () =>
       sendWelcomeEmail({
         to: user.email,
         firstName: user.firstName,
@@ -41,7 +41,7 @@ export const sendSignUpEmail = inngest.createFunction(
       }),
     );
 
-    return { sent: true };
+    return { sent: true, emailResult };
   },
 );
 

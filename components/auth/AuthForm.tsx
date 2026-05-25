@@ -50,11 +50,13 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
         }
 
         if (result.data?.user) {
-          await queueUserCreatedEmail({
+          void queueUserCreatedEmail({
             id: result.data.user.id,
             firstName,
             lastName,
             email,
+          }).catch((queueError) => {
+            console.error("[MarketPulse signup email queue failed]", queueError);
           });
         }
       } else {
