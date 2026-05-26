@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
@@ -11,7 +10,6 @@ import { Button } from "@/components/ui/button";
 type AuthMode = "sign-in" | "sign-up";
 
 export default function AuthForm({ mode }: { mode: AuthMode }) {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
   const isSignUp = mode === "sign-up";
@@ -71,8 +69,7 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
         }
       }
 
-      router.push("/");
-      router.refresh();
+      window.location.assign("/");
     });
   }
 
