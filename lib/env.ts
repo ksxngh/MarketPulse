@@ -6,6 +6,7 @@ export const env = {
     optional("BETTER_AUTH_URL", "http://localhost:3000"),
   ),
   betterAuthUrl: optional("BETTER_AUTH_URL", "http://localhost:3000"),
+  betterAuthTrustedOrigins: optional("BETTER_AUTH_TRUSTED_ORIGINS"),
   betterAuthSecret: optional(
     "BETTER_AUTH_SECRET",
     "dev-only-change-me-marketpulse-local-secret",

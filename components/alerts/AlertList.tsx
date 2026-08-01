@@ -2,8 +2,9 @@
 
 import { useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, BellRing, Loader2, RotateCcw, Trash2 } from "lucide-react";
+import { ArrowRight, BellRing, Loader2, RefreshCw, RotateCcw, Trash2 } from "lucide-react";
 import {
+  checkUserPriceAlertsNow,
   deletePriceAlert,
   reactivatePriceAlert,
 } from "@/actions/alert.actions";
@@ -37,6 +38,17 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
 
   return (
     <div className="grid gap-4">
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={isPending}
+          onClick={() => startTransition(() => void checkUserPriceAlertsNow())}
+        >
+          {isPending ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
+          Check now
+        </Button>
+      </div>
       {alerts.map((alert) => (
         <div
           key={alert.id}

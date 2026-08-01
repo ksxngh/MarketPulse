@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/actions/user.actions";
 import { getStockQuote } from "@/lib/finnhub";
+import { sendPriceAlertEmail } from "@/lib/email";
 import { Alert, type AlertDirection } from "@/lib/models/alert.model";
 import { connectToDatabase } from "@/lib/mongodb";
 import { cleanText, normalizeSymbol, rateLimit } from "@/lib/security";
@@ -129,4 +130,68 @@ export async function reactivatePriceAlert(alertId: string) {
   if (alert?.symbol) revalidatePath(`/stocks/${alert.symbol}`);
 
   return { ok: true, message: "Alert reactivated." };
+}
+
+export async function checkUserPriceAlertsNow() {
+  await rateLimit("alert-check", 10);
+  const user = await getCurrentUser();
+  if (!user?.email) {
+    return { ok: false, message: "Sign in to check alerts." };
+  }
+
+  await connectToDatabase();
+  const alerts = await Alert.find({ userId: user.id, status: "active" }).lean();
+  let fired = 0;
+  let checked = 0;
+
+  for (const alert of alerts) {
+    const quote = await getStockQuote(alert.symbol);
+    const currentPrice = quote.currentPrice;
+    checked += 1;
+
+    const targetReached =
+      alert.direction === "above"
+        ? currentPrice >= alert.targetPrice
+        : currentPrice <= alert.targetPrice;
+
+    await Alert.updateOne(
+      { _id: alert._id, userId: user.id },
+      { $set: { lastCheckedPrice: currentPrice } },
+    );
+
+    if (!targetReached) continue;
+
+    await sendPriceAlertEmail({
+      to: user.email,
+      firstName: user.name?.split(" ")[0] || "there",
+      symbol: alert.symbol,
+      company: alert.company,
+      direction: alert.direction,
+      targetPrice: alert.targetPrice,
+      currentPrice,
+    });
+
+    await Alert.updateOne(
+      { _id: alert._id, userId: user.id },
+      {
+        $set: {
+          status: "fired",
+          firedAt: new Date(),
+          lastCheckedPrice: currentPrice,
+        },
+      },
+    );
+
+    fired += 1;
+  }
+
+  revalidatePath("/alerts");
+
+  return {
+    ok: true,
+    message:
+      fired > 0
+        ? `Checked ${checked} alert(s). Sent ${fired} email(s).`
+        : `Checked ${checked} alert(s). No targets crossed yet.`,
+  };
 }

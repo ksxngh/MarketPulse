@@ -23,6 +23,7 @@ const trustedOrigins = Array.from(
     [
       env.appUrl,
       env.betterAuthUrl,
+      ...env.betterAuthTrustedOrigins.split(","),
       process.env.VERCEL_URL,
       process.env.VERCEL_PROJECT_PRODUCTION_URL,
     ]
