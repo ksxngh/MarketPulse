@@ -1,4 +1,5 @@
 import AlertList from "@/components/alerts/AlertList";
+import BriefingTestButton from "@/components/alerts/BriefingTestButton";
 import { getUserAlerts } from "@/actions/alert.actions";
 
 export default async function AlertsPage() {
@@ -17,6 +18,7 @@ export default async function AlertsPage() {
         </p>
       </section>
 
+      <BriefingTestButton />
       <AlertList alerts={alerts} />
     </div>
   );

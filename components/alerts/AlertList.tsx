@@ -2,7 +2,16 @@
 
 import { useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, BellRing, Loader2, RefreshCw, RotateCcw, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import {
+  ArrowRight,
+  BellRing,
+  Loader2,
+  RefreshCw,
+  RotateCcw,
+  Trash2,
+} from "lucide-react";
 import {
   checkUserPriceAlertsNow,
   deletePriceAlert,
@@ -23,6 +32,8 @@ type AlertView = {
 };
 
 export default function AlertList({ alerts }: { alerts: AlertView[] }) {
+  const router = useRouter();
+  const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
 
   if (alerts.length === 0) {
@@ -38,14 +49,36 @@ export default function AlertList({ alerts }: { alerts: AlertView[] }) {
 
   return (
     <div className="grid gap-4">
-      <div className="flex justify-end">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-gray-500">
+          {message || "Use Check now to test crossed alerts immediately."}
+        </p>
         <Button
           type="button"
           variant="outline"
           disabled={isPending}
-          onClick={() => startTransition(() => void checkUserPriceAlertsNow())}
+          onClick={() => {
+            setMessage("");
+            startTransition(async () => {
+              try {
+                const result = await checkUserPriceAlertsNow();
+                setMessage(result.message);
+                router.refresh();
+              } catch (error) {
+                setMessage(
+                  error instanceof Error
+                    ? error.message
+                    : "Could not check alerts.",
+                );
+              }
+            });
+          }}
         >
-          {isPending ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
+          {isPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <RefreshCw className="size-4" />
+          )}
           Check now
         </Button>
       </div>
